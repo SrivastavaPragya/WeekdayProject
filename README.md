@@ -27,6 +27,8 @@ cd path/to/your/directory
 
 7. Once the dependencies are installed, start the Vite server by running the following command:
 
+npm run dev
+
 8. You can now access the project in your browser by navigating to the specified address (usually http://localhost:3000).
 
 
