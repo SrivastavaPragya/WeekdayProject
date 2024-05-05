@@ -29,17 +29,13 @@ cd path/to/your/directory
 
 8. You can now access the project in your browser by navigating to the specified address (usually http://localhost:3000).
 
-## Usage:
 
-[describe how to use the project or any instructions for users]
 
 ## Additional Notes:
-
-[any additional information or instructions]
+- For any queries or support, feel free to contact the author via email (pragya142018@gmail.com) or phone number (+91 8604789802).
+- If you encounter any issues with the extension, please refer to the GitHub repository for potential updates or bug fixes.
 
 ## Author:
-
 Pragya Srivastava
-
 - Email: pragya142018@gmail.com
 - Contact No: +91 8604789802
