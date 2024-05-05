@@ -30,7 +30,11 @@ height: 100vh;
 }
 
 .logoContent{
-   
+    >h4{
+      
+        margin-inline: 1rem;
+        margin-bottom: .5rem;
+    }
 }
 
 .ReferLogoContent{
