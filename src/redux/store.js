@@ -1,6 +1,10 @@
-import { createStore } from 'redux';
-import rootReducer from './reducers';  // You will create this in the next step
+import { configureStore } from '@reduxjs/toolkit';
+import companyNameFilterReducer from './companyNameFilterSlice';
 
-const store = createStore(rootReducer);
+ const store = configureStore({
+  reducer: {
+    companyNameFilter: companyNameFilterReducer,
+  },
+});
 
 export default store;
