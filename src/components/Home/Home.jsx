@@ -1,75 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import "./Home.css";
-// import { useNavigate } from "react-router-dom";
-
-// const Home = () => {
-//   const [jobs, setJobs] = useState([]);
-//   const [companyNameFilter, setCompanyNameFilter] = useState("");
-
-//   const [showFullText, setShowFullText] = useState(false);
-//   const navigate = useNavigate(); // Create the navigate function
-//   const [filters, setFilters] = useState({
-//     role: "",
-//     employees: "",
-//     experience: "",
-//     remote: "",
-//     salary: "",
-   
-//   });
-//   useEffect(() => {
-//     const fetchJobs = async () => {
-//       const myHeaders = new Headers();
-//       myHeaders.append('Content-Type', 'application/json');
-
-//       const body = JSON.stringify({ limit: 10, offset: 0 });
-//       const requestOptions = {
-//         method: 'POST',
-//         headers: myHeaders,
-//         body,
-//       };
-
-//       try {
-//         const response = await fetch('https://api.weekday.technology/adhoc/getSampleJdJSON', requestOptions);
-//         const data = await response.json();
-//         setJobs(data.jdList);
-//       } catch (error) {
-//         console.error('Error fetching jobs:', error);
-//       }
-//     };
-
-//     fetchJobs();
-//   }, []);
- 
-
- 
-  
-
-//   const handleFilterChange = (e) => {
-//     const { name, value } = e.target;
-//     if (name === 'companyName') {
-//       setCompanyNameFilter(value);
-//     } else {
-//       setFilters(prevFilters => ({
-//         ...prevFilters,
-//         [name]: value
-//       }));
-//     }
-//   };
-  
-
-//   const filteredJobs = jobs.filter(job => {
-//     const roleMatch = filters.role === "" || (job.jobRole && job.jobRole.toLowerCase().includes(filters.role.toLowerCase()));
-//     const expMatch = filters.experience === "" || 
-//       (job.minExp !== undefined && job.maxExp !== undefined &&
-//       parseInt(filters.experience) >= job.minExp && parseInt(filters.experience) <= job.maxExp);
-//     const remoteMatch = filters.remote === "" || (job.location && job.location.toLowerCase().includes(filters.remote.toLowerCase()));
-//     const salaryMatch = filters.salary === "" || 
-//       (job.maxJdSalary !== undefined && parseInt(filters.salary) <= job.maxJdSalary);
-//     const companyMatch = companyNameFilter === "" || (job.companyName && job.companyName.toLowerCase().includes(companyNameFilter.toLowerCase()));
-  
-//     return roleMatch && expMatch && remoteMatch && salaryMatch && companyMatch;
-//   });
-
 import React, { useEffect, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +19,7 @@ const Home = () => {
   });
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
-  const companyNameFilter = useSelector(state => state.companyNameFilter);
+  const companyNameFilter = useSelector((state) => state.companyNameFilter);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -99,8 +27,8 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [loading]);
 
   useEffect(() => {
@@ -112,60 +40,83 @@ const Home = () => {
     setLoading(true);
 
     const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append("Content-Type", "application/json");
     const body = JSON.stringify({ limit: 10, offset: offset });
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body,
     };
 
     try {
-      const response = await fetch('https://api.weekday.technology/adhoc/getSampleJdJSON', requestOptions);
+      const response = await fetch(
+        "https://api.weekday.technology/adhoc/getSampleJdJSON",
+        requestOptions
+      );
       const data = await response.json();
-      setJobs(prevJobs => [...prevJobs, ...data.jdList]); // Append new jobs
-      setOffset(prevOffset => prevOffset + data.jdList.length);
+      setJobs((prevJobs) => [...prevJobs, ...data.jdList]); // Append new jobs
+      setOffset((prevOffset) => prevOffset + data.jdList.length);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching jobs:', error);
+      console.error("Error fetching jobs:", error);
       setLoading(false);
     }
   };
 
   const applyFilters = () => {
-    const filtered = jobs.filter(job => {
-      const roleMatch = !filters.role || (job.jobRole && job.jobRole.toLowerCase().includes(filters.role));
-      const expMatch = !filters.experience || 
-        (job.minExp !== undefined && job.maxExp !== undefined &&
-        parseInt(filters.experience) >= job.minExp && parseInt(filters.experience) <= job.maxExp);
-      const remoteMatch = !filters.remote || (job.location && job.location.toLowerCase().includes(filters.remote));
-      const salaryMatch = !filters.salary || 
-        (job.maxJdSalary !== undefined && parseInt(filters.salary) <= job.maxJdSalary);
-      const companyMatch = !companyNameFilter || (job.companyName && job.companyName.toLowerCase().includes(companyNameFilter.toLowerCase()));
+    const filtered = jobs.filter((job) => {
+      const roleMatch =
+        !filters.role ||
+        (job.jobRole && job.jobRole.toLowerCase().includes(filters.role));
+      const expMatch =
+        !filters.experience ||
+        (job.minExp !== undefined &&
+          job.maxExp !== undefined &&
+          parseInt(filters.experience) >= job.minExp &&
+          parseInt(filters.experience) <= job.maxExp);
+      const remoteMatch =
+        !filters.remote ||
+        (job.location && job.location.toLowerCase().includes(filters.remote));
+      const salaryMatch =
+        !filters.salary ||
+        (job.maxJdSalary !== undefined &&
+          parseInt(filters.salary) <= job.maxJdSalary);
+      const companyMatch =
+        !companyNameFilter ||
+        (job.companyName &&
+          job.companyName
+            .toLowerCase()
+            .includes(companyNameFilter.toLowerCase()));
 
-      return roleMatch && expMatch && remoteMatch && salaryMatch && companyMatch;
+      return (
+        roleMatch && expMatch && remoteMatch && salaryMatch && companyMatch
+      );
     });
     setFilteredJobs(filtered);
   };
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'companyName') {
+    if (name === "companyName") {
       dispatch(setCompanyNameFilter(value.toLowerCase()));
     } else {
-      setFilters(prevFilters => ({
+      setFilters((prevFilters) => ({
         ...prevFilters,
-        [name]: value.toLowerCase()
+        [name]: value.toLowerCase(),
       }));
     }
   };
 
   const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || loading) return;
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight ||
+      loading
+    )
+      return;
     fetchJobs();
   };
 
-  
   return (
     <>
       <div className="homeContainer">
@@ -203,7 +154,7 @@ const Home = () => {
         <div className="MiddleContent">
           <div className="filters">
             <div className="filter">
-            <select name="role" onChange={handleFilterChange}>
+              <select name="role" onChange={handleFilterChange}>
                 <option>Roles</option>
                 <option>Backend</option>
                 <option>Frontend</option>
@@ -217,7 +168,7 @@ const Home = () => {
             </div>
 
             <div className="filter">
-            <select name="employees" onChange={handleFilterChange}>
+              <select name="employees" onChange={handleFilterChange}>
                 <option>Number Of Employees</option>
                 <option>1-10</option>
                 <option>11-20</option>
@@ -229,7 +180,7 @@ const Home = () => {
               </select>
             </div>
             <div className="filter">
-            <select name="experience" onChange={handleFilterChange}>
+              <select name="experience" onChange={handleFilterChange}>
                 <option>Experience</option>
                 <option>1 Year</option>
                 <option>2 Years</option>
@@ -245,7 +196,7 @@ const Home = () => {
               </select>
             </div>
             <div className="filter">
-            <select name="remote" onChange={handleFilterChange}>
+              <select name="remote" onChange={handleFilterChange}>
                 <option>Remote</option>
                 <option>Hybrid</option>
                 <option>On-site</option>
@@ -253,7 +204,7 @@ const Home = () => {
             </div>
 
             <div className="filter">
-            <select name="salary" onChange={handleFilterChange}>
+              <select name="salary" onChange={handleFilterChange}>
                 <option>Minimum Base Pay Salary</option>
                 <option>0L</option>
                 <option>10L</option>
@@ -266,100 +217,70 @@ const Home = () => {
               </select>
             </div>
             <div className="filter">
-  <input
-    type="text"
-    placeholder="Search Company Name"
-    name="companyName"
-    value={companyNameFilter}
-    onChange={handleFilterChange}
-  />
-</div>
-
+              <input
+                type="text"
+                placeholder="Search Company Name"
+                name="companyName"
+                value={companyNameFilter}
+                onChange={handleFilterChange}
+              />
+            </div>
           </div>
 
-         
-
-{/* <div className="grid-container">
-            {filteredJobs.map((job) => (
-              <div className="card" key={job.jdUid}>
-                <div className="card-header">
-                  <span className="date-posted">Posted recently</span>
-                </div>
-                <div className="job-details">
-                  <div className="jobImg">
-                    <img src={job.logoUrl || './bird.jpg'} alt="Company Logo" className="company-logo" />
+          <div className="grid-container">
+            {filteredJobs.length > 0 ? (
+              filteredJobs.map((job, index) => (
+                <div className="card" key={`${job.jdUid}-${index}`}>
+                  <div className="card-header">
+                    <span className="date-posted">Posted recently</span>
                   </div>
-                  <div className="jobContent">
-                    <h2>{job.companyName}</h2>
-                    <h3>{job.jobRole}</h3>
-                    <h4>{job.location}</h4>
-                    <p>Estimated Salary: {job.minJdSalary ? `$${job.minJdSalary}k - ` : ''}${job.maxJdSalary}k {job.salaryCurrencyCode}</p>
+                  <div className="job-details">
+                    <div className="jobImg">
+                      <img
+                        src={job.logoUrl || "./placeholder.jpg"}
+                        alt="Company Logo"
+                        className="company-logo"
+                      />
+                    </div>
+                    <div className="jobContent">
+                      <h2>{job.companyName}</h2>
+                      <h3>{job.jobRole}</h3>
+                      <h4>{job.location}</h4>
+                      <p>
+                        Estimated Salary:{" "}
+                        {job.minJdSalary ? `$${job.minJdSalary}k - ` : ""}$$
+                        {job.maxJdSalary}k {job.salaryCurrencyCode}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <h1>About Company:</h1>
+                    <p className={showFullText ? "" : "truncated"}>
+                      {job.jobDetailsFromCompany}
+                    </p>
+                    <button
+                      className="show-more-button"
+                      onClick={() => navigate("/jobDescription")}
+                    >
+                      Show More
+                    </button>
+                  </div>
+                  <div className="card-footer">
+                    <h3>Minimum Experience</h3>
+                    <h2>
+                      {job.minExp} - {job.maxExp} years
+                    </h2>
+                    <button>Easy Apply</button>
                   </div>
                 </div>
-                <div className="card-body">
-                  <h1>About Company:</h1>
-                  <p className={showFullText ? "" : "truncated"}>
-                    {job.jobDetailsFromCompany}
-                  </p>
-                  <button className="show-more-button" onClick={() => navigate('/jobDescription')}>
-                    Show More
-                  </button>
-                </div>
-                <div className="card-footer">
-                  <h3>Minimum Experience</h3>
-                  <h2>{job.minExp} - {job.maxExp} years</h2>
-                  <button>Easy Apply</button>
-                </div>
+              ))
+            ) : (
+              <div className="no-jobs-container">
+                <h2>No Jobs Available for This Category at the Moment</h2>
+                <p>Try adjusting your filters or check back later.</p>
               </div>
-            ))
-            
-            
-            }
-           
-          </div> */}
-
-<div className="grid-container">
-          {filteredJobs.length > 0 ? (
-            filteredJobs.map((job,index) => (
-              <div className="card" key={`${job.jdUid}-${index}`}>
-                <div className="card-header">
-                  <span className="date-posted">Posted recently</span>
-                </div>
-                <div className="job-details">
-                  <div className="jobImg">
-                    <img src={job.logoUrl || './placeholder.jpg'} alt="Company Logo" className="company-logo" />
-                  </div>
-                  <div className="jobContent">
-                    <h2>{job.companyName}</h2>
-                    <h3>{job.jobRole}</h3>
-                    <h4>{job.location}</h4>
-                    <p>Estimated Salary: {job.minJdSalary ? `$${job.minJdSalary}k - ` : ''}$${job.maxJdSalary}k {job.salaryCurrencyCode}</p>
-                  </div>
-                </div>
-                <div className="card-body">
-                  <h1>About Company:</h1>
-                  <p className={showFullText ? "" : "truncated"}>
-                    {job.jobDetailsFromCompany}
-                  </p>
-                  <button className="show-more-button" onClick={() => navigate('/jobDescription')}>
-                    Show More
-                  </button>
-                </div>
-                <div className="card-footer">
-                  <h3>Minimum Experience</h3>
-                  <h2>{job.minExp} - {job.maxExp} years</h2>
-                  <button>Easy Apply</button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-jobs-container">
-              <h2>No Jobs Available for This Category at the Moment</h2>
-              <p>Try adjusting your filters or check back later.</p>
-            </div>
-          )}
-        </div>
-          
+            )}
+          </div>
         </div>
 
         <div className="RightSidebar">
