@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,7 +35,7 @@ const Home = () => {
     applyFilters();
   }, [jobs, filters, companyNameFilter]); // React to filter changes
 
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     if (loading) return;
     setLoading(true);
 
@@ -61,7 +61,7 @@ const Home = () => {
       console.error("Error fetching jobs:", error);
       setLoading(false);
     }
-  };
+  }, [loading, offset]);
 
   const applyFilters = () => {
     const filtered = jobs.filter((job) => {
@@ -268,9 +268,9 @@ const Home = () => {
                   <div className="card-footer">
                     <h3>Minimum Experience</h3>
                     <h2>
-                      {job.minExp} - {job.maxExp} years
+                      {job.minExp || 0} - {job.maxExp || 0} years
                     </h2>
-                    <button>Easy Apply</button>
+                    <button ><a href={job.jdLink} target="_blank">Easy Apply </a></button>
                   </div>
                 </div>
               ))

@@ -2,7 +2,11 @@
   display: flex;
 
   height: 100vh;
+  
 }
+
+
+
 
 .leftSidebar {
   border: 1px solid gray;
@@ -111,7 +115,8 @@
 .grid-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* Creates three columns */
-
+column-gap: 2rem;
+row-gap: 1.5rem;
   padding: 1rem;
   margin-top: 2rem;
 }
@@ -122,11 +127,10 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 
   padding: 1rem;
-  height: 33rem;
-  width: 24rem;
+  height: 35rem;
+ 
 
-  margin-bottom: 2rem;
-  margin-top: 1rem;
+ 
 }
 
 .card-header {
@@ -346,3 +350,4 @@
     width: 90%;
   }
 }
+
